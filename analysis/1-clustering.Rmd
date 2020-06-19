@@ -1,0 +1,110 @@
+---
+title: "Clustering analysis"
+author: "Helena L. Crowell"
+date: "`r format(Sys.Date(), '%B %m, %Y')`"
+output: 
+  html_document:
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+knitr::opts_chunk$set(autodep = TRUE, cache = TRUE, cache.lazy = FALSE)
+```
+
+### Load packages
+
+```{r load-libs, message = FALSE, warning = FALSE}
+library(CATALYST)
+library(dplyr)
+library(flowCore)
+```
+
+### Load data
+
+```{r load-data}
+sce <- readRDS(file.path("output", "sce0.rds"))
+```
+
+# Median type-marker expressions
+
+```{r plotExprHeatmap, fig.width = 6, fig.height = 5}
+plotExprHeatmap(sce, features = type_markers(sce), 
+    by = "cluster_id", k = "meta25", row_anno = FALSE)
+```
+
+# Dimensionality Reduction
+
+```{r}
+plotDR(sce, dr = "TSNE", color_by = "meta25")
+```
+
+
+
+# Plot multiheatmap
+```{r}
+plotMultiHeatmap(sce, 
+                 hm1 = "type", hm2 = "state", 
+                 k = "meta25", row_anno = FALSE,
+                 col_dend = c(FALSE, FALSE))
+```
+
+
+
+
+
+
+
+
+
+
+# Annotation
+
+```{r mergeClusters, fig.width = 6, fig.height = 5}
+# read in manual merging table
+anno <- read.csv(file.path("data", "annotation.csv"), header = TRUE, sep = ";")
+
+# apply manual merging
+sce <- mergeClusters(sce, k = "meta25", table = anno, id = "mm")
+
+# heatmap of median type-marker expressions
+plotExprHeatmap(sce, features = type_markers(sce), 
+    by = "cluster_id", k = "mm", row_anno = FALSE)
+```
+
+# Dimensionality reduction after manual merging
+
+```{r}
+plotDR(sce, dr = "TSNE", color_by = "mm")
+```
+
+
+
+
+
+
+
+# Cluster abundances
+
+## ...by sample
+
+```{r plotAbundances-sample}
+plotAbundances(sce, k = "mm", by = "sample_id")
+```
+
+## ...by cluster
+
+```{r plotAbundances-cluster, fig.width = 8, fig.height = 5}
+p <- plotAbundances(sce, k = "mm", by = "cluster_id")
+p$facet$params$ncol <- 5; p
+```
+
+### Save SCE to .rds
+
+```{r save-data}
+saveRDS(sce, file.path("output", "sce.rds"))
+```
+
+
+
+

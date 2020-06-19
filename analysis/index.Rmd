@@ -1,0 +1,27 @@
+---
+title: "Contents"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+---
+
+- [Data preparation](0-preparation.html):
+    - construct `SingleCellExperiment`
+    - diagnostic plots
+    - `FlowSom` & `ConsensusClusterPlus` (meta)clustering
+    - dimensionality reduction (UMAP & t-SNE)
+    
+- [Clustering analysis](1-clustering.html):
+    - this is a test
+    - and so is this...
+    
+- [Dimensionality reduction](2-dimred.html):
+    - ...
+    
+- [Differential analysis](3-differential.html)
+    - ...
+    
+
+
+

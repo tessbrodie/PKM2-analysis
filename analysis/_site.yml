@@ -1,0 +1,21 @@
+name: "PKM2 analysis"
+output_dir: ../docs
+navbar:
+  title: "PKM2 analysis"
+  left:
+  - text: Contents
+    href: index.html
+  - text: Data preparation
+    href: 0-preparation.html
+  - text: Clustering analysis
+    href: 1-clustering.html
+  - text: Dimensionality reduction
+    href: 2-dimred.html
+  - text: Differential analysis
+    href: 3-differential.html
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: yes
+    theme: simplex
+    highlight: textmate

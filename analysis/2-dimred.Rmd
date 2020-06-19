@@ -1,0 +1,75 @@
+---
+title: "Dimensionality reduction"
+author: "Helena L. Crowell"
+date: "`r format(Sys.Date(), '%B %m, %Y')`"
+output: 
+  html_document:
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+knitr::opts_chunk$set(autodep = TRUE, cache = TRUE, cache.lazy = FALSE)
+```
+
+### Load packages
+
+```{r load-libs, message = FALSE, warning = FALSE}
+library(CATALYST)
+library(ggplot2)
+```
+
+### Load data
+
+```{r load-data}
+sce <- readRDS(file.path("output", "sce.rds"))
+```
+
+# Colored by patient {.tabset}
+
+```{r plotDR-patient, results = "asis"}
+for (i in reducedDimNames(sce)) {
+    p <- plotDR(sce, i, color_by = "patient_id")
+    cat("## ", i, "{-}\n"); print(p); cat("\n\n")
+}
+```
+
+# Colored by condition {.tabset}
+
+```{r plotDR-condition, results = "asis"}
+for (i in reducedDimNames(sce)) {
+    p <- plotDR(sce, i, color_by = "condition")
+    cat("## ", i, "{-}\n"); print(p); cat("\n\n")
+}
+```
+
+# Colored by cluster
+
+```{r plotDR-cluster}
+plotDR(sce, dr = "TSNE", color_by = "mm") 
+```
+
+## ...split by condition
+
+```{r plotDR-cluster-by-condition}
+plotDR(sce, dr = "TSNE", color_by = "mm", facet_by = "condition") 
+```
+
+# Colored by expression
+
+```{r plotDR-expression, fig.width = 12, fig.height = 5}
+p <- plotDR(sce, dr = "TSNE", color_by = type_markers(sce))
+p$facet$params$ncol <- 5; p
+```
+
+## ...split by condition {.tabset}
+
+```{r plotDR-expression-condition, results = "asis", fig.width = 12, fig.height = 5}
+for (i in state_markers(sce)) {
+    p <- plotDR(sce, dr = "TSNE", color_by = i, facet_by = "condition")
+    cat("### ", i, "\n"); print(p); cat("\n\n")
+}
+```
+
+
+

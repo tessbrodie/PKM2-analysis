@@ -1,0 +1,98 @@
+---
+title: "Data preparation"
+date: "`r format(Sys.Date(), '%B %m, %Y')`"
+output: 
+  workflowr::wflow_html:
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+knitr::opts_chunk$set(autodep = TRUE, cache = TRUE, cache.lazy = FALSE)
+```
+
+### Load packages
+
+```{r load-libs, message = FALSE, warning = FALSE}
+library(CATALYST)
+library(dplyr)
+```
+
+### Load data
+
+```{r load-data}
+# read in metadata table & fix factor levels
+md <- read.csv(file.path("data", "metadata.csv"), sep = ";")
+md <- rename(md, 
+    file_name = file, sample_id = sampleID, 
+    condition = cond1, patient_id = patientID)
+md$condition <- factor(md$condition, unique(md$condition))
+sids <- md$sample_id[order(md$condition)]
+pids <- unique(md$patient_id)
+md$sample_id <- factor(sids, sids)
+md$patient_id <- factor(pids, pids)
+
+# construct 'SingleCellExperiment'
+panel <- read.csv(file.path("data", "panel.csv"), sep = ";")
+sce <- prepData(file.path("data", "fcs"), panel, md)
+```
+
+# Cell counts
+
+```{r plotCounts, fig.width = 6, fig.height = 3}
+plotCounts(sce, group_by = "sample_id", color_by = "condition")
+```
+
+# Pseudobulk-level MDS plot
+
+```{r pbMDS, fig.height = 6, fig.width= 8}
+pbMDS(sce)
+```
+
+## ...split by condition {.tabset}
+
+```{r pbMDS-condition, results = "asis", fig.height = 4}
+for (i in levels(sce$condition)[-1]) {
+    sub <- filterSCE(sce, condition %in% c("control", !!i))
+    cat("### ", i, "\n"); print(pbMDS(sub)); cat("\n\n")
+}
+```
+
+# Median marker expression
+
+```{r plotExprHeatmap, fig.width = 10, fig.height = 6}
+plotExprHeatmap(sce, scale = "last", q = 0, 
+    by = "sample_id", row_anno = "condition")
+```
+
+## ...split by condition {.tabset}
+
+```{r plotExprHeatmap-condition, results = "asis", fig.width = 10, fig.height = 3}
+for (i in levels(sce$condition)[-1]) {
+    sub <- filterSCE(sce, condition %in% c("control", !!i))
+    p <- plotExprHeatmap(sub, scale = "last", q = 0, 
+        by = "sample_id", row_anno = "condition")
+    cat("### ", i, "\n"); print(p); cat("\n\n")
+}
+```
+
+# Clustering
+
+```{r cluster, message = FALSE}
+sce <- cluster(sce, maxK = 25)
+```
+
+# Dimensionality reduction
+
+```{r runDR}
+sce <- runDR(sce, dr = "UMAP", cells = 1e3)
+sce <- runDR(sce, dr = "TSNE", cells = 1000)
+```
+
+### Save SCE to .rds
+
+```{r save-data}
+saveRDS(sce, file.path("output", "sce0.rds"))
+```
+
+

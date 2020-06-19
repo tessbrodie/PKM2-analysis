@@ -1,0 +1,96 @@
+---
+title: "Differential analysis"
+author: "Helena L. Crowell"
+date: "`r format(Sys.Date(), '%B %m, %Y')`"
+output: 
+  html_document:
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+knitr::opts_chunk$set(autodep = TRUE, cache = TRUE, cache.lazy = FALSE)
+```
+
+### Load packages
+
+```{r load-libs, message = FALSE, warning = FALSE}
+library(CATALYST)
+library(diffcyt)
+```
+
+### Load data
+
+```{r load-data}
+sce <- readRDS(file.path("output", "sce.rds"))
+```
+
+# DA analysis {.tabset}
+
+```{r da, results = "asis", fig.width = 8, fig.height = 6}
+# create design matrix
+design <- createDesignMatrix(ei(sce), "condition")
+colnames(design) <- gsub("condition", "", colnames(design))
+
+# run DA analysis for control vs. each timepoint
+for (i in colnames(design)[-1]) {
+    # create contrast matrix
+    contrast <- createContrast(as.numeric(colnames(design) == i))
+    
+    # run DA analysis
+    res <- diffcyt(sce, clustering_to_use = "mm",
+        analysis_type = "DA", method_DA = "diffcyt-DA-edgeR",
+        design = design, contrast = contrast, verbose = FALSE)
+    
+    # extract results table
+    tbl <- rowData(res$res)
+    
+    # write table to .csv
+    fn <- file.path("output", sprintf("DA-results_%s.csv", i))
+    write.csv(tbl, fn, row.names = FALSE)
+    
+    # subset control and timepoint of interest
+    sub <- filterSCE(sce, condition %in% c("control", !!i))
+    
+    # plot differential heatmap
+    p <- plotDiffHeatmap(sub, tbl, all = TRUE, col_anno = "condition")
+    cat("## ", i, "\n"); print(p); cat("\n\n")
+}
+```
+
+# DS analysis
+
+```{r}
+# create design matrix
+design <- createDesignMatrix(ei(sce), "condition")
+colnames(design) <- gsub("condition", "", colnames(design))
+
+# run DS analysis for control vs. each timepoint
+for (i in colnames(design)[-1]) {
+  # create contrast matrix
+  contrast <- createContrast(as.numeric(colnames(design) == i))
+    
+  # run DS analysis & extract results table
+  res_DS <- diffcyt(sce, clustering_to_use = "mm",
+                  analysis_type = "DS", method_DS = "diffcyt-DS-limma",
+                  design = design, contrast = contrast, verbose = FALSE)
+
+  # extract results table
+  tbl_DS <- rowData(res_DS$res)
+
+  # write table to .csv
+    fn <- file.path("output", sprintf("DS-results_%s.csv", i))
+    write.csv(tbl_DS, fn, row.names = FALSE)
+    
+  # subset control and timepoint of interest
+    sub <- filterSCE(sce, condition %in% c("control", !!i))
+    
+  # plot differential heatmap
+    p <- plotDiffHeatmap(sub, tbl_DS, all = TRUE, col_anno = "condition")
+    cat("## ", i, "\n"); print(p); cat("\n\n")
+} 
+```
+
+
+
+
