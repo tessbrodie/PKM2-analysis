@@ -1,9 +1,9 @@
 ---
 title: "PKM2"
 author: "Tess Brodie"
-date: "`r format(Sys.Date(), '%B %m, %Y')`"
+date: "`r format(Sys.Date())`"
 output: 
-  workflowr::wflow_html:
+   html_document:
     toc_depth: 2
 ---
 
