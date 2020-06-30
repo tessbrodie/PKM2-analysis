@@ -13,6 +13,8 @@ navbar:
     href: 2-dimred.html
   - text: Differential analysis
     href: 3-differential.html
+  - text: PKM2 paper Nicolas
+    href: 4-PKM2.html
 output:
   workflowr::wflow_html:
     toc: yes
