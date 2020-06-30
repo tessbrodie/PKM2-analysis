@@ -13,15 +13,23 @@ output:
     - dimensionality reduction (UMAP & t-SNE)
     
 - [Clustering analysis](1-clustering.html):
-    - this is a test
-    - and so is this...
+    - Over cluster to 25 clusters
+    - Heatmaps and tSNE plots of target expression to guide manual merging
+    - Manual merging to identify main liver cell populations
+    - Heatmaps with target expression in main cell populations 
     
 - [Dimensionality reduction](2-dimred.html):
-    - ...
+    - tSNE plots colored by patient/condition/cluster
+    - tSNE plots colored by Target expression and split by condition
     
-- [Differential analysis](3-differential.html)
-    - ...
+- [Differential analysis](3-differential.html):
+    - Differential Abundance analysis with main liver populations
+    - Differential State analysis with main liver populations
     
-
+- [PKM2 paper Nicolas](4-PKM2.html):
+    - Liver subsets with PKM2 expression over time
+    - Differential State analysis on BMDM
+    - PKM2 on Hepatocytes
+    - Hepatocyte clusters and PKM2 as heatmap and tSNE plot
 
 

@@ -1,0 +1,154 @@
+---
+title: "PKM2"
+author: "Tess Brodie"
+date: "2020-06-30"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+knitr::opts_chunk$set(autodep = TRUE, cache = TRUE, cache.lazy = FALSE)
+```
+
+### Load packages
+
+```{r load-libs, message = FALSE, warning = FALSE}
+library(CATALYST)
+library(dplyr)
+library(flowCore)
+library(ggplot2)
+library(diffcyt)
+library(cowplot)
+```
+
+### Load data
+
+```{r load-data}
+sce <- readRDS(file.path("output", "sce.rds"))
+```
+
+## Liver subsets with PKM2 expression over time
+
+```{r}
+plotMultiHeatmap(sce, 
+                 k = "mm", scale = "never",
+                 hm1 = "type", hm2 = "PKM2",
+                 row_anno = FALSE, col_clust = FALSE,
+                 row_clust = FALSE, col_anno = FALSE,
+                 bars = TRUE, perc = TRUE,
+                 hm2_pal = rev(hcl.colors(10, "RdBu")),
+                 hm1_pal = c("grey95", "black"))
+```
+
+## Differential State analysis on BMDM
+We see that the BMDM have increasing amounts of PKM2 over time after PhX and we want to see if the increase in PKM2 expression is associated with other significant phenotypic changes in this subset. 
+
+```{r}
+# create design matrix
+design <- createDesignMatrix(ei(sce), "condition")
+colnames(design) <- gsub("condition", "", colnames(design))
+
+# run DS analysis for control vs. each timepoint
+for (i in colnames(design)[-1]) {
+  # create contrast matrix
+  contrast <- createContrast(as.numeric(colnames(design) == i))
+    
+  # run DS analysis & extract results table
+  res_DS <- diffcyt(sce, clustering_to_use = "mm",
+                  analysis_type = "DS", method_DS = "diffcyt-DS-limma",
+                  design = design, contrast = contrast, verbose = FALSE)
+
+  # extract results table
+  tbl_DS <- rowData(res_DS$res)
+  
+   # include all results for selected cluster
+  k <- metadata(res_DS$res)$clustering_name
+  sub1 <- filterSCE(sce, cluster_id == "BMDM", k = k)
+  
+  sub1
+  
+
+  # write table to .csv
+    fn <- file.path("output", sprintf("DS-results_%s.csv", i))
+    write.csv(tbl_DS, fn, row.names = FALSE)
+    
+
+   # subset control and timepoint of interest
+    sub <- filterSCE(sub1, condition %in% c("control", !!i))
+    
+    
+  # plot differential heatmap
+    p <- plotDiffHeatmap(sub, tbl_DS, all = TRUE, col_anno = "condition")
+    cat("## ", i, "\n"); print(p); cat("\n\n")
+} 
+```
+
+## tSNE with targets that identify the subsets and PKM2
+We would like to show how the subsets were identified and show the differential expression of PKM2 in hepatocytes
+
+```{r}
+p <- plotDR(sce, dr = "TSNE", color_by = c("CD45","Gata6", "F4_80", "CD11b", "PKM2"))
+p$facet$params$ncol <- 3; p
+```
+
+## Hepatocytes and differential expression of PKM2
+*need help scaling second tsne plot
+
+```{r}
+sceH <- filterSCE(sce, k = "mm",
+               cluster_id %in% "Hepatocytes")
+
+plot_grid(
+  plotDR(sce, dr= "TSNE", color_by = "mm"),
+  plotDR(sceH, dr= "TSNE", color_by = "mm"))
+```
+
+## tSNE of hepatocytes
+
+```{r}
+sceH <- runDR(sceH, dr = "TSNE", features = NULL)
+plotDR(sceH, dr = "TSNE", color_by = "PKM2")
+
+```
+
+## Proportion of hepatocytes per sample
+
+```{r}
+plotCounts(sceH, 
+           prop = TRUE,
+           group_by = "condition", 
+           color_by = "patient_id")
+```
+
+## Number of hepatocytes per sample
+
+```{r}
+plotCounts(sceH, 
+           group_by = "sample_id", 
+           color_by = "condition")
+
+```
+
+## Hepatocyte subsets and PKM2 over time
+
+```{r}
+sceH <- cluster(sceH, 
+                xdim = 10, ydim = 10, maxK = 3, 
+                verbose = FALSE)
+
+plotMultiHeatmap(sceH, 
+                 hm1 = "type", hm2 = "PKM2", 
+                 k = "meta3", row_anno = FALSE,
+                 col_dend = c(FALSE, TRUE))
+```
+
+### tSNE plot of hepatocyte subsets 
+
+```{r}
+plotDR(sceH, dr = "TSNE", color_by = "meta3")
+```
+
