@@ -11,6 +11,7 @@
 
 <meta name="author" content="Tess Brodie" />
 
+<meta name="date" content="2020-06-30" />
 
 <title>PKM2</title>
 
@@ -388,7 +389,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">PKM2</h1>
 <h4 class="author">Tess Brodie</h4>
-<h4 class="date">Juni 06, 2020</h4>
+<h4 class="date">2020-06-30</h4>
 
 </div>
 
@@ -494,9 +495,6 @@ load-data
 load-libs
 </li>
 <li>
-plotDR-expression
-</li>
-<li>
 session-info-chunk-inserted-by-workflowr
 </li>
 <li>
@@ -546,16 +544,16 @@ unnamed-chunk-9
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtessbrodiePKM2analysistree3df65334f29c16f34c41575b6fe32aacbe7d4cbatargetblank3df6533a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tessbrodie/PKM2-analysis/tree/3df65334f29c16f34c41575b6fe32aacbe7d4cba" target="_blank">3df6533</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomtessbrodiePKM2analysistreee74ae21b7093c2a6ab311e1309f9508e39142953targetblanke74ae21a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/tessbrodie/PKM2-analysis/tree/e74ae21b7093c2a6ab311e1309f9508e39142953" target="_blank">e74ae21</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomtessbrodiePKM2analysistree3df65334f29c16f34c41575b6fe32aacbe7d4cbatargetblank3df6533a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomtessbrodiePKM2analysistreee74ae21b7093c2a6ab311e1309f9508e39142953targetblanke74ae21a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/tessbrodie/PKM2-analysis/tree/3df65334f29c16f34c41575b6fe32aacbe7d4cba" target="_blank">3df6533</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/tessbrodie/PKM2-analysis/tree/e74ae21b7093c2a6ab311e1309f9508e39142953" target="_blank">e74ae21</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -567,6 +565,7 @@ Ignored files:
     Ignored:    analysis/2-dimred_cache/
     Ignored:    analysis/3-differential_cache/
     Ignored:    analysis/4-PKM2_cache/
+    Ignored:    analysis/site_libs/
     Ignored:    data/
     Ignored:    output/
 
@@ -574,6 +573,7 @@ Untracked files:
     Untracked:  .Rhistory
     Untracked:  SA_plot.pdf
     Untracked:  analysis/.Rhistory
+    Untracked:  analysis/3-differential.utf8.md
 
 </code></pre>
 <p>
@@ -612,6 +612,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/tessbrodie/PKM2-analysis/blob/e74ae21b7093c2a6ab311e1309f9508e39142953/analysis/4-PKM2.Rmd" target="_blank">e74ae21</a>
+</td>
+<td>
+Tess Brodie
+</td>
+<td>
+2020-06-30
+</td>
+<td>
+Add PKM2 analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/tessbrodie/PKM2-analysis/b311902ffe8988af00285a9ae61379bc8fab9bc0/docs/4-PKM2.html" target="_blank">b311902</a>
+</td>
+<td>
+Tess Brodie
+</td>
+<td>
+2020-06-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -886,31 +920,31 @@ loaded via a namespace (and not attached):
  [81] knitr_1.28                  fs_1.4.1                   
  [83] zip_2.0.4                   purrr_0.3.4                
  [85] nlme_3.1-147                RBGL_1.63.1                
- [87] compiler_4.0.0              beeswarm_0.2.3             
- [89] curl_4.3                    png_0.1-7                  
- [91] statmod_1.4.34              tibble_3.0.0               
- [93] stringi_1.4.6               forcats_0.5.0              
- [95] lattice_0.20-41             Matrix_1.2-18              
- [97] nloptr_1.2.2.1              vctrs_0.2.4                
- [99] pillar_1.4.3                lifecycle_0.2.0            
-[101] GlobalOptions_0.1.1         BiocNeighbors_1.5.6        
-[103] data.table_1.12.8           bitops_1.0-6               
-[105] irlba_2.3.3                 httpuv_1.5.2               
-[107] R6_2.4.1                    latticeExtra_0.6-29        
-[109] promises_1.1.0              gridExtra_2.3              
-[111] RProtoBufLib_1.99.8         rio_0.5.16                 
-[113] vipor_0.4.5                 codetools_0.2-16           
-[115] boot_1.3-24                 MASS_7.3-51.5              
-[117] gtools_3.8.2                assertthat_0.2.1           
-[119] rprojroot_1.3-2             rjson_0.2.20               
-[121] withr_2.2.0                 multcomp_1.4-13            
-[123] GenomeInfoDbData_1.2.3      hms_0.5.3                  
-[125] ncdfFlow_2.33.2             grid_4.0.0                 
-[127] tidyr_1.0.2                 minqa_1.2.4                
-[129] rmarkdown_2.1               DelayedMatrixStats_1.9.1   
-[131] carData_3.0-3               Rtsne_0.15                 
-[133] git2r_0.27.1                base64enc_0.1-3            
-[135] ggbeeswarm_0.6.0           </code></pre>
+ [87] whisker_0.4                 compiler_4.0.0             
+ [89] beeswarm_0.2.3              curl_4.3                   
+ [91] png_0.1-7                   statmod_1.4.34             
+ [93] tibble_3.0.0                stringi_1.4.6              
+ [95] forcats_0.5.0               lattice_0.20-41            
+ [97] Matrix_1.2-18               nloptr_1.2.2.1             
+ [99] vctrs_0.2.4                 pillar_1.4.3               
+[101] lifecycle_0.2.0             GlobalOptions_0.1.1        
+[103] BiocNeighbors_1.5.6         data.table_1.12.8          
+[105] bitops_1.0-6                irlba_2.3.3                
+[107] httpuv_1.5.2                R6_2.4.1                   
+[109] latticeExtra_0.6-29         promises_1.1.0             
+[111] gridExtra_2.3               RProtoBufLib_1.99.8        
+[113] rio_0.5.16                  vipor_0.4.5                
+[115] codetools_0.2-16            boot_1.3-24                
+[117] MASS_7.3-51.5               gtools_3.8.2               
+[119] assertthat_0.2.1            rprojroot_1.3-2            
+[121] rjson_0.2.20                withr_2.2.0                
+[123] multcomp_1.4-13             GenomeInfoDbData_1.2.3     
+[125] hms_0.5.3                   ncdfFlow_2.33.2            
+[127] grid_4.0.0                  tidyr_1.0.2                
+[129] minqa_1.2.4                 rmarkdown_2.1              
+[131] DelayedMatrixStats_1.9.1    carData_3.0-3              
+[133] Rtsne_0.15                  git2r_0.27.1               
+[135] base64enc_0.1-3             ggbeeswarm_0.6.0           </code></pre>
 </div>
 </div>
 </div>
@@ -973,7 +1007,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
